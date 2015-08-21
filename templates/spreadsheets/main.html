@@ -11,9 +11,17 @@ $(function(){
 			minSpareRows: 1,
 			afterChange: function (change, source){
 					if(change!=null){
-						row = change[0][0];
-						dat = sprd_tbl.getDataAtRow(row);
-						unsaved_changes[dat[0]] = dat.slice(1);
+							$('#{{key}}_statusbar').html("Unsaved changes...");
+						console.log(change);
+						for(row in change){
+							row_num = change[row][0];
+							dat = sprd_tbl.getDataAtRow(row_num);
+							var vald = {};
+							for(var i = 0; i<dat.length; i++){
+									vald[{{raw_headers}}[i]] = dat[i];
+							}
+							unsaved_changes[dat[0]] = vald;
+						}
 						console.log(unsaved_changes);
 					}
 			}
@@ -29,7 +37,7 @@ $(function(){
 								'csrfmiddlewaretoken':csrf_token
 						},
 						success: function(response){
-								console.log("response");
+								$('#{{key}}_statusbar').html("All changes saved...");
 						},
 						error: function(response){
 								console.log("didn't work");
@@ -49,6 +57,7 @@ $(function(){
 								<li id="{{key}}save_button"> <a href="#"> Save </a> </li>
 						</ul>
 				</div>
+				<span id="{{key}}_statusbar"> </span>
 		</div>
 		<div id="{{key}}dj_sprd_tbl" class="row">
 		</div>

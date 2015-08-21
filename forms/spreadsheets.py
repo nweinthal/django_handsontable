@@ -41,7 +41,7 @@ class Spreadsheet(object):
         context_dict = {}
         context_dict['data'] = self.data_source.render_block()
         context_dict['headers'] = self.get_headers() # replace with template tag
-        context_dict['raw_headers'] = ["id"] + list(self.headers) # TODO better
+        context_dict['raw_headers'] = mark_safe(str(["id"] + list(self.headers))) # TODO better
         context_dict['ajax_save_url'] = self.ajax_save_url
         context_dict['key'] = "id678_" #TODO make this unique n' stuff
         print context_dict['headers']
