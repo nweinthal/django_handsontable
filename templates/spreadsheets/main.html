@@ -1,0 +1,57 @@
+<script>	
+$(function(){
+		var unsaved_changes = {};
+		var csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+				// Bit of a hack - right now you have to render a csrf_token somewhere on the requesting page.  
+				// Eventually this oughta be replaced by a templatetag
+		data = {{data}};
+		sprd_tbl = new Handsontable($('#{{key}}dj_sprd_tbl')[0], {
+			data: data,
+			colHeaders: {{headers}},
+			minSpareRows: 1,
+			afterChange: function (change, source){
+					if(change!=null){
+						row = change[0][0];
+						dat = sprd_tbl.getDataAtRow(row);
+						unsaved_changes[dat[0]] = dat.slice(1);
+						console.log(unsaved_changes);
+					}
+			}
+		});
+
+
+		$('#{{key}}save_button').on('click', function(){
+				$.ajax({
+						url: '{{ajax_save_url}}',
+						type: 'POST',
+						data: {
+								'changes':JSON.stringify(unsaved_changes),
+								'csrfmiddlewaretoken':csrf_token
+						},
+						success: function(response){
+								console.log("response");
+						},
+						error: function(response){
+								console.log("didn't work");
+						}
+				});
+		});
+});
+</script>
+<div class="container-fluid">
+		<div id="{{key}}actionbar" class="row">
+				<div class="btn-group">
+						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"> 
+								File 
+								<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+								<li id="{{key}}save_button"> <a href="#"> Save </a> </li>
+						</ul>
+				</div>
+		</div>
+		<div id="{{key}}dj_sprd_tbl" class="row">
+		</div>
+</div>
+
+

@@ -1,0 +1,16 @@
+{% load i18n admin_static suit_list %}
+{% if result_hidden_fields %}
+    <div class="hiddenfields">{# DIV for HTML validation #}
+        {% for item in result_hidden_fields %}{{ item }}{% endfor %}
+    </div>
+{% endif %}
+{% if results %}
+<script>
+$(function(){
+    //$('#result_spread').html("leaydylyldaedylldeayl");
+});
+</script>
+    <div class="results" id="result_spread">
+        {{ cl.get_query_set }}
+    </div>
+{% endif %}
